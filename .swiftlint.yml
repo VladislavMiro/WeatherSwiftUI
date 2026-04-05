@@ -6,6 +6,9 @@ disabled_rules:
   - vertical_whitespace_opening_braces
   - vertical_whitespace_closing_braces
   - static_over_final_class
+  - colon
+  - comment_spacing
+  - redundant_type_annotation
 
 
 opt_in_rules:
@@ -14,7 +17,6 @@ opt_in_rules:
   - closure_end_indentation
   - closure_spacing
   - collection_alignment
-  - colon # promote to error
   - convenience_type
   - discouraged_object_literal
   - empty_collection_literal
@@ -39,7 +41,6 @@ opt_in_rules:
   - pattern_matching_keywords
   - prefer_self_type_over_type_of_self
   - redundant_nil_coalescing
-  - redundant_type_annotation
   - strict_fileprivate
   - toggle_bool
   - trailing_closure
