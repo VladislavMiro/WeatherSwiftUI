@@ -11,30 +11,33 @@ import RswiftResources
 @MainActor
 struct MainView: View {
     
-    @State private var selectedTab: Tabs = .current
+    @StateObject private var viewModel: MainViewModel
     
-    init() {
+    public init(viewModel: MainViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
         configureTabBar()
     }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $viewModel.coordinator.selectedTab) {
             VStack {
-                
+                viewModel.coordinator.showWeatherView()
             }
-            .tag(Tabs.current)
+            .ignoresSafeArea()
+            .tag(MainViewTabs.current)
             .tabItem {
-                Image(systemName: Tabs.current.image)
-                Text(Tabs.current.localizedTitle)
+                Image(systemName: MainViewTabs.current.image)
+                Text(MainViewTabs.current.localizedTitle)
             }
             
             VStack {
-                
+                viewModel.coordinator.showListView()
             }
-            .tag(Tabs.list)
+            .ignoresSafeArea()
+            .tag(MainViewTabs.list)
             .tabItem {
-                Image(systemName: Tabs.list.image)
-                Text(Tabs.list.localizedTitle)
+                Image(systemName: MainViewTabs.list.image)
+                Text(MainViewTabs.list.localizedTitle)
                     
             }
         }
@@ -67,25 +70,6 @@ struct MainView: View {
 
 private extension MainView {
     
-    enum Tabs: Hashable {
-        case current
-        case list
-        
-        var image: String {
-            switch self {
-            case .current: "location.fill"
-            case .list: "list.bullet"
-            }
-        }
-        
-        var localizedTitle: String {
-            switch self {
-            case .current: "Current"
-            case .list: "List"
-            }
-        }
-    }
-    
     enum Colors {
         static let background: Color = Color(R.color.backgroundColor() ?? .systemBackground)
         static let tabBarStandartBackground: UIColor = R.color.secondBackgroundColor() ?? .secondarySystemBackground
@@ -97,5 +81,8 @@ private extension MainView {
 }
 
 #Preview {
-    MainView()
+    var coordinator = MainViewCoordinator()
+    let viewModel = MainViewModel(coordinator: coordinator)
+    
+    MainView(viewModel: viewModel)
 }
