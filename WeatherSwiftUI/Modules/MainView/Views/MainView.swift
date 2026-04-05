@@ -38,7 +38,6 @@ struct MainView: View {
             .tabItem {
                 Image(systemName: MainViewTabs.list.image)
                 Text(MainViewTabs.list.localizedTitle)
-                    
             }
         }
         .tint(Colors.selectedTab)

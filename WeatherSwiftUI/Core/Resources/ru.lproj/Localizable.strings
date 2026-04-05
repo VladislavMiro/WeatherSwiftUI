@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  WeatherSwiftUI
+
+  Created by Vladislav Miroshnichenko on 05.04.2026.
+  
+*/
+
+// MARK: - MainView
+
+"MainView.CurrentTabTitle" = "Текущая позция";
+"MainView.ListTabTitle" = "Список";

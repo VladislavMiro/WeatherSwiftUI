@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RswiftResources
 
 enum MainViewTabs: Hashable {
     case current
@@ -20,8 +21,8 @@ enum MainViewTabs: Hashable {
     
     var localizedTitle: String {
         switch self {
-        case .current: "Current"
-        case .list: "List"
+        case .current: R.string.localizable.mainViewCurrentTabTitle()
+        case .list: R.string.localizable.mainViewListTabTitle()
         }
     }
 }
