@@ -10,8 +10,12 @@ import RswiftResources
 
 struct WeatherView: View {
     var body: some View {
-        VStack {
-            WeatherHeaderView()
+        VStack() {
+            ScrollView {
+                WeatherHeaderView()
+                DayForecastView()
+                    .padding(.horizontal)
+            }
         }
         .background(Color.background)
     }
