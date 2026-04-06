@@ -13,7 +13,11 @@ struct WeatherView: View {
         VStack() {
             ScrollView {
                 WeatherHeaderView()
+                
                 DayForecastView()
+                    .padding(.horizontal)
+                
+                WeekForecastView()
                     .padding(.horizontal)
             }
         }

@@ -6,5 +6,12 @@
   
 */
 
+// MARK: - MainView
+
 "MainView.CurrentTabTitle" = "Current";
 "MainView.ListTabTitle" = "List";
+
+// MARK: - WeatherView
+
+"DayForecastView.Title" = "Day forecast";
+"WeekForecastView.Title" = "Week Forecast";

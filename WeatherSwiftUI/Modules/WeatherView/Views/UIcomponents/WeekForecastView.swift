@@ -6,12 +6,33 @@
 //
 
 import SwiftUI
+import RswiftResources
 
 struct WeekForecastView: View {
+    
+    private var data: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    
     var body: some View {
-        VStack(alignment: .center) {
-            Text("")
+        VStack(alignment: .leading) {
+            Text(StringConstants.title)
+                .font(Fonts.title)
+                .foregroundStyle(Colors.title)
+            List(data, id: \.self) { item in
+                WeekForecastCell(day: item)
+                    .listRowSeparatorTint(Colors.listSeparator)
+                    .listRowBackground(Colors.background)
+                    .listRowInsets(.init(.zero))
+            }
+            .frame(height: LayoutConstants.listHeight)
+            .padding(.bottom)
+            .scrollDisabled(true)
+            .listStyle(.plain)
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: LayoutConstants.cornerRadius)
+                .fill(Colors.background)
+        )
     }
 }
 
@@ -20,28 +41,22 @@ struct WeekForecastView: View {
 private extension WeekForecastView {
     
     enum LayoutConstants {
-        static let tableViewTopOffset: CGFloat = 15.0
-        static let tableViewRowHeight: CGFloat = 54.0
-        static let tableViewBottomOffset: CGFloat = 5.0
-        static let superViewCornerRadius: CGFloat = 15.0
-        static let superViewHeight: CGFloat = 465.0
-        static let headerLabelTopOffset: CGFloat = 10.0
-        static let headerLabelLeadingOffset: CGFloat = 15.0
+        static let cornerRadius: CGFloat = 15.0
+        static let listHeight: CGFloat = 300.0
     }
     
     enum Fonts {
-        static let headerLabel: UIFont = .boldSystemFont(ofSize: 16)
+        static let title: Font = .system(size: 16, weight: .bold)
     }
     
     enum StringConstants {
-        static let headerLabel: String = R.string.localizable.weekForecastViewTitleLabel()
+        static let title: String = R.string.localizable.weekForecastViewTitle()
     }
     
     enum Colors {
-        static let background: UIColor? = R.color.secondBackgroundColor()
-        static let tableViewBackground: UIColor? = R.color.secondBackgroundColor()
-        static let tableViewSeparator: UIColor? = R.color.secondFontColor()
-        static let headerLabelText: UIColor? = R.color.secondFontColor()
+        static let background: Color = Color(R.color.secondBackgroundColor() ?? .secondarySystemBackground)
+        static let listSeparator: Color = Color(R.color.secondFontColor() ?? .secondaryLabel)
+        static let title: Color = Color(R.color.secondFontColor() ?? .secondaryLabel)
     }
     
 }

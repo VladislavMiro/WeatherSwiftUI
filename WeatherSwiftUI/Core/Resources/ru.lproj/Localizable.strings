@@ -10,3 +10,8 @@
 
 "MainView.CurrentTabTitle" = "Текущая позция";
 "MainView.ListTabTitle" = "Список";
+
+// MARK: - WeatherView
+
+"DayForecastView.Title" = "Прогноз на день";
+"WeekForecastView.Title" = "Прогноз на неделю";
