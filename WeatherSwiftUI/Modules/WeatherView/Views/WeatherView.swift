@@ -18,12 +18,12 @@ struct WeatherView: View {
                     .padding(.horizontal)
                 
                 WeekForecastView()
-                    .padding(.horizontal)
+                    .padding([.top, .horizontal])
                 
                 AirConditionView {
                     debugPrint("Tapped")
                 }
-                .padding(.horizontal)
+                .padding()
             }
         }
         .background(Color.background)

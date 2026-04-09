@@ -27,9 +27,9 @@ extension MainViewCoordinator {
     
     @ViewBuilder
     public func showWeatherView() -> some View {
-        VStack {
-            Color.green
-        }
+        let coordinator = WeatherViewCoordinator()
+        
+        coordinator.start()
     }
     
     @ViewBuilder

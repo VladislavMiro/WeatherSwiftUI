@@ -19,7 +19,8 @@ final class WeatherViewCoordinator {
 extension WeatherViewCoordinator {
 
     public func start() -> some View {
-        return EmptyView()
+        let view = WeatherView()
+        return view
     }
  
     public func showDetailView() -> some View {

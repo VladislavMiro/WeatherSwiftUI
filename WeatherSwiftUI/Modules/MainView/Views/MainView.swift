@@ -23,7 +23,6 @@ struct MainView: View {
             VStack {
                 viewModel.coordinator.showWeatherView()
             }
-            .ignoresSafeArea()
             .tag(MainViewTabs.current)
             .tabItem {
                 Image(systemName: MainViewTabs.current.image)
