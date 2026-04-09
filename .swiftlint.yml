@@ -9,6 +9,7 @@ disabled_rules:
   - colon
   - comment_spacing
   - redundant_type_annotation
+  - multiline_arguments
 
 
 opt_in_rules:
@@ -31,7 +32,6 @@ opt_in_rules:
   - last_where
   - legacy_random
   - literal_expression_end_indentation
-  - multiline_arguments
   - multiline_function_chains
   - multiline_literal_brackets
   - multiline_parameters
@@ -98,6 +98,8 @@ type_name:
 identifier_name:
   allowed_symbols: "_"
   excluded: # excluded via string array
+    - km
+    - mm
     - x
     - y
     - x1
@@ -114,10 +116,6 @@ identifier_name:
     - url
     - key
     - i
-
-multiline_arguments:
-  first_argument_location: next_line
-  only_enforce_after_first_closure_on_first_line: true
 
 private_over_fileprivate:
   validate_extensions: true

@@ -15,3 +15,18 @@
 
 "DayForecastView.Title" = "Прогноз на день";
 "WeekForecastView.Title" = "Прогноз на неделю";
+
+"AirConditionView.Title" = "Состояние воздуха";
+"AirConditionView.SeeMoreButtonTitle" = "Больше";
+"AirConditionView.RealFeelItemTitle" = "Ощущается как";
+"AirConditionView.WindItemTitle" = "Ветер";
+"AirConditionView.RainChanceItemTitle" = "Вероятность дождя";
+"AirConditionView.UvIndexItemTitle" = "UV индекс";
+
+"Symbols.celciusSymbol" = "°";
+"Symbols.kmPerHour" = " km/h";
+"Symbols.km" = " km";
+"Symbols.precent" = " %";
+"Symbols.hPa" = " hPa";
+"Symbols.mBa" = " mBa";
+"Symbols.mm" = " mm";

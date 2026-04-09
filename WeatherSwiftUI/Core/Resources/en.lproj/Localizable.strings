@@ -15,3 +15,18 @@
 
 "DayForecastView.Title" = "Day forecast";
 "WeekForecastView.Title" = "Week Forecast";
+
+"AirConditionView.Title" = "Air conditions";
+"AirConditionView.SeeMoreButtonTitle" = "See more";
+"AirConditionView.RealFeelItemTitle" = "Feels like";
+"AirConditionView.WindItemTitle" = "Wind";
+"AirConditionView.RainChanceItemTitle" = "Chance of rain";
+"AirConditionView.UvIndexItemTitle" = "UV Index";
+
+"Symbols.celciusSymbol" = "°";
+"Symbols.kmPerHour" = " km/h";
+"Symbols.km" = " km";
+"Symbols.precent" = " %";
+"Symbols.hPa" = " hPa";
+"Symbols.mBa" = " mBa";
+"Symbols.mm" = " mm";

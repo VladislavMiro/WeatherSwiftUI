@@ -80,7 +80,7 @@ private extension MainView {
 }
 
 #Preview {
-    var coordinator = MainViewCoordinator()
+    let coordinator = MainViewCoordinator()
     let viewModel = MainViewModel(coordinator: coordinator)
     
     MainView(viewModel: viewModel)

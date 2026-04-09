@@ -14,7 +14,7 @@ final class WeatherViewCoordinator {
     
 }
 
-//MARK: - Extension with public methods
+// MARK: - Extension with public methods
 
 extension WeatherViewCoordinator {
 
