@@ -1,0 +1,11 @@
+//
+//  Configuration.xcconfig
+//  WeatherSwiftUI
+//
+//  Created by Vladislav Miroshnichenko on 20.04.2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+WeatherApi = dae10b3d2afb406289a120023231112
