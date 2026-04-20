@@ -54,7 +54,6 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        debugPrint("test", manager.authorizationStatus.rawValue)
         switch manager.authorizationStatus {
         case .restricted, .denied:
             coordinatesSubject.send(defaultCoordinates)

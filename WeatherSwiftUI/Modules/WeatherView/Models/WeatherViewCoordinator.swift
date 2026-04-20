@@ -20,7 +20,9 @@ extension WeatherViewCoordinator {
 
     public func start() -> some View {
         let locationManager = LocationManager()
-        let viewModel = WeatherViewModel(coordinator: self, locationManager: locationManager)
+        let apiKey = Bundle.main.infoDictionary?["WeatherApi"] as? String ?? ""
+        let networkService = NetworkService()
+        let viewModel = WeatherViewModel(coordinator: self, locationManager: locationManager, networkService: networkService)
         let view = WeatherView(viewModel: viewModel)
         
         return view
