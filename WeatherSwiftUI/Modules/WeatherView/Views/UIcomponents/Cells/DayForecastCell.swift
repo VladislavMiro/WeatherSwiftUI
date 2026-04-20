@@ -9,18 +9,24 @@ import SwiftUI
 import RswiftResources
 
 struct DayForecastCell: View {
+    
+    // MARK: - Private properties
+    
+    private let data: WeatherViewOutput.DayForecastCell
+    
+    // MARK: - UI layout
+    
     var body: some View {
         VStack(alignment: .center, spacing: LayoutConstants.stackSpacing) {
-            Text("00:00")
+            Text(data.time)
             
-            Image(.d119)
+            Image(data.icon)
                 .resizable()
                 .scaledToFill()
                 .frame(width: LayoutConstants.imageSize, height: LayoutConstants.imageSize)
             
-            Text("7")
+            Text(data.temperature)
         }
-        //.frame(width: 115, height: 115)
         .padding()
         .font(Fonts.label)
         .foregroundStyle(Colors.label)
@@ -29,6 +35,13 @@ struct DayForecastCell: View {
                 .fill(Colors.background)
         )
     }
+    
+    // MARK: - Initialaizers
+    
+    init(data: WeatherViewOutput.DayForecastCell) {
+        self.data = data
+    }
+    
 }
 
 // MARK: - Extension with private subobjects
@@ -54,5 +67,5 @@ private extension DayForecastCell {
 }
 
 #Preview {
-    DayForecastCell()
+    DayForecastCell(data: .init(time: "00:00", temperature: "8", icon: "d113"))
 }

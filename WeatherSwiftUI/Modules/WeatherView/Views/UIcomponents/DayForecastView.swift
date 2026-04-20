@@ -10,7 +10,7 @@ import RswiftResources
 
 struct DayForecastView: View {
     
-    private var data: [String] = ["Test", "Test2", "Test3", "Test4", "Test5", "Test6"]
+    @Binding var data: [WeatherViewOutput.DayForecastCell]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,8 +24,8 @@ struct DayForecastView: View {
                 LazyHGrid(rows: [
                     .init(.adaptive(minimum: LayoutConstants.rowSize))
                 ], spacing: LayoutConstants.rowSpacing) {
-                    ForEach(data, id: \.self) { _ in
-                        DayForecastCell()
+                    ForEach(data, id: \.self) { item in
+                        DayForecastCell(data: item)
                     }
                 }
                 .frame(height: LayoutConstants.gridHeight)
@@ -71,5 +71,5 @@ private extension DayForecastView {
 }
 
 #Preview {
-    DayForecastView()
+    DayForecastView(data: .constant([]))
 }
