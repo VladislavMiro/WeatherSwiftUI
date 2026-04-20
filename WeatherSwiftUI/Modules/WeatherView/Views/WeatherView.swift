@@ -20,15 +20,15 @@ struct WeatherView: View {
     var body: some View {
         VStack {
             ScrollView {
-                WeatherHeaderView()
+                WeatherHeaderView(data: $viewModel.state.data.header)
                 
-                DayForecastView()
+                DayForecastView(data: $viewModel.state.data.dayForecast)
                     .padding(.horizontal)
                 
-                WeekForecastView()
+                WeekForecastView(data: $viewModel.state.data.weekForecast)
                     .padding([.top, .horizontal])
                 
-                AirConditionView {
+                AirConditionView(data: $viewModel.state.data.airCondition) {
                     detailIsPresented = true
                 }
                 .padding()
@@ -70,7 +70,7 @@ private extension WeatherView {
 }
 
 #Preview {
-    let viewModel = WeatherViewModel(coordinator: WeatherViewCoordinator(), locationManager: LocationManager())
+    let viewModel = WeatherViewModel(coordinator: WeatherViewCoordinator(), locationManager: LocationManager(), networkService: NetworkService())
     
     WeatherView(viewModel: viewModel)
 }

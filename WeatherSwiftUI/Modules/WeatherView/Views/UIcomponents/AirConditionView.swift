@@ -9,8 +9,13 @@ import SwiftUI
 import RswiftResources
 
 struct AirConditionView: View {
+
+    // MARK: - Private properties
     
+    @Binding private var data: WeatherViewOutput.AirCondition
     private var buttonTapped: (() -> Void)?
+    
+    // MARK: - UI layout
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -56,7 +61,8 @@ struct AirConditionView: View {
     
     // MARK: - Initialaizers
     
-    public init(buttonTapped: (() -> Void)? = nil) {
+    public init(data: Binding<WeatherViewOutput.AirCondition>, buttonTapped: (() -> Void)? = nil) {
+        self._data = data
         self.buttonTapped = buttonTapped
     }
     
@@ -71,13 +77,13 @@ private extension AirConditionView {
         
         switch item {
         case .feelsLike:
-            data = "\(14) " + Symbols.celciusSymbol.description
+            data = self.data.realFeel
         case .wind:
-            data = "\(14) " + Symbols.kmPerHour.description
+            data = self.data.wind
         case .chanceOfRain:
-            data = "\(14)" + Symbols.precent.description
+            data = self.data.chanceOfRain
         case .uvIndex:
-            data = "\(14)"
+            data = self.data.uvIndex
         }
         
         return VStack(alignment: .leading, spacing: LayoutConstants.gridItemSpacing) {
@@ -161,5 +167,5 @@ private extension AirConditionView {
 }
 
 #Preview {
-    AirConditionView()
+    AirConditionView(data: .constant(.init()))
 }
