@@ -19,11 +19,16 @@ final class WeatherViewCoordinator {
 extension WeatherViewCoordinator {
 
     public func start() -> some View {
-        let view = WeatherView()
+        let locationManager = LocationManager()
+        let viewModel = WeatherViewModel(coordinator: self, locationManager: locationManager)
+        let view = WeatherView(viewModel: viewModel)
+        
         return view
     }
  
     public func showDetailView() -> some View {
-        return EmptyView()
+        return VStack {
+            Color.red
+        }
     }
 }

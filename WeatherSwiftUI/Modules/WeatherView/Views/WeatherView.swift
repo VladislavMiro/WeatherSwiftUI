@@ -9,6 +9,14 @@ import SwiftUI
 import RswiftResources
 
 struct WeatherView: View {
+    
+    // MARK: - Private properties
+    
+    @StateObject private var viewModel: WeatherViewModel
+    @State private var detailIsPresented: Bool = false
+    
+    // MARK: - UI elements
+    
     var body: some View {
         VStack {
             ScrollView {
@@ -21,13 +29,30 @@ struct WeatherView: View {
                     .padding([.top, .horizontal])
                 
                 AirConditionView {
-                    debugPrint("Tapped")
+                    detailIsPresented = true
                 }
                 .padding()
             }
+            .background(Colors.background)
         }
-        .background(Color.background)
+        .alert("Error",
+               isPresented: $viewModel.state.isError,
+               actions: {
+            Button("OK") { }
+        }, message: {
+            Text(viewModel.state.errorMessage)
+        })
+        .onAppear {
+            viewModel.send(.fetchData)
+        }
     }
+    
+    // MARK: - Initialaizers
+    
+    public init(viewModel: WeatherViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
 }
 
 // MARK: - Extension with private subobjects
@@ -45,5 +70,7 @@ private extension WeatherView {
 }
 
 #Preview {
-    WeatherView()
+    let viewModel = WeatherViewModel(coordinator: WeatherViewCoordinator(), locationManager: LocationManager())
+    
+    WeatherView(viewModel: viewModel)
 }
