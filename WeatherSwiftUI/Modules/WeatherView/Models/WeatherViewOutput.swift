@@ -27,7 +27,7 @@ struct WeatherViewOutput {
         var icon: String
     }
     
-    struct WeekForecast {
+    struct WeekForecast: Hashable {
         var day: String
         var icon: String
         var condition: String

@@ -10,31 +10,42 @@ import RswiftResources
 
 struct WeekForecastCell: View {
     
-    let day: String
+    // MARK: - Private properties
+    
+    private let data: WeatherViewOutput.WeekForecast
+    
+    // MARK: - UI layout
     
     var body: some View {
         HStack(alignment: .center, spacing: LayoutConstants.stackSpacing) {
-            Text(day)
+            Text(data.day)
                 .frame(width: LayoutConstants.dayLabelWidth, alignment: .leading)
             
             HStack(alignment: .center, spacing: LayoutConstants.imageStackSpacing) {
-                Image(.d113)
+                Image(data.icon)
                     .resizable()
                     .scaledToFill()
                     .frame(width: LayoutConstants.imageSize, height: LayoutConstants.imageSize)
-                Text("Cloudy")
+                Text(data.condition)
                     .frame(alignment: .leading)
             }
             
             Spacer()
             
-            Text("-8/6")
+            Text(data.temperature)
                 .frame(alignment: .trailing)
         }
         .foregroundStyle(Colors.labels)
         .font(Fonts.labels)
         .background(Colors.background)
     }
+    
+    // MARK: - Initialaizers
+    
+    public init(data: WeatherViewOutput.WeekForecast) {
+        self.data = data
+    }
+    
 }
 
 // MARK: - Extension with private subobjects
@@ -60,5 +71,5 @@ private extension WeekForecastCell {
 }
 
 #Preview {
-    WeekForecastCell(day: "Monday")
+    WeekForecastCell(data: .init(day: "Monday", icon: "d113", condition: "Cloudy", temperature: "0"))
 }

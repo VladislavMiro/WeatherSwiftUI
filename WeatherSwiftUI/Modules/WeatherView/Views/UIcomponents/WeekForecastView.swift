@@ -10,7 +10,7 @@ import RswiftResources
 
 struct WeekForecastView: View {
     
-    private var data: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    @Binding var data: [WeatherViewOutput.WeekForecast]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -18,7 +18,7 @@ struct WeekForecastView: View {
                 .font(Fonts.title)
                 .foregroundStyle(Colors.title)
             List(data, id: \.self) { item in
-                WeekForecastCell(day: item)
+                WeekForecastCell(data: item)
                     .listRowSeparatorTint(Colors.listSeparator)
                     .listRowBackground(Colors.background)
                     .listRowInsets(.init(.zero))
@@ -62,5 +62,5 @@ private extension WeekForecastView {
 }
 
 #Preview {
-    WeekForecastView()
+    WeekForecastView(data: .constant([]))
 }
