@@ -10,23 +10,25 @@ import RswiftResources
 
 struct WeatherHeaderView: View {
     
+    @Binding var data: WeatherViewOutput.Header
+    
     var body: some View {
         VStack(alignment: .center, spacing: LayoutConstants.spacing) {
             VStack(alignment: .center) {
-                Text("London")
+                Text(data.regionName)
                     .font(Fonts.cityLabel)
                     .foregroundStyle(Colors.cityLabelText)
-                Text("Cloudy")
+                Text(data.description)
                     .font(Fonts.descriptionLabel)
                     .foregroundStyle(Colors.descriptionLabelText)
             }
             
-            Image(.d113)
+            Image(data.icon)
                 .resizable()
                 .frame(width: LayoutConstants.imageSize, height: LayoutConstants.imageSize)
                 .scaledToFill()
             
-            Text("-7")
+            Text(data.temperature)
                 .font(Fonts.temperatureLabel)
                 .foregroundStyle(Colors.temperatureLabelText)
         }
@@ -61,5 +63,5 @@ private extension WeatherHeaderView {
 }
 
 #Preview {
-    WeatherHeaderView()
+    WeatherHeaderView(data: .constant(.init()))
 }
