@@ -13,7 +13,7 @@ struct AirConditionView: View {
     // MARK: - Private properties
     
     @Binding private var data: WeatherViewOutput.AirCondition
-    private var buttonTapped: (() -> Void)?
+    @Binding private var isButtonTapped: Bool
     
     // MARK: - UI layout
     
@@ -27,7 +27,7 @@ struct AirConditionView: View {
                 Spacer()
                     
                 Button {
-                    buttonTapped?()
+                    isButtonTapped = true
                 } label: {
                     Text(StringConstants.buttonTitle)
                         .foregroundStyle(Colors.buttonTitle)
@@ -61,9 +61,9 @@ struct AirConditionView: View {
     
     // MARK: - Initialaizers
     
-    public init(data: Binding<WeatherViewOutput.AirCondition>, buttonTapped: (() -> Void)? = nil) {
+    public init(data: Binding<WeatherViewOutput.AirCondition>, isButtonTapped: Binding<Bool>) {
         self._data = data
-        self.buttonTapped = buttonTapped
+        self._isButtonTapped = isButtonTapped
     }
     
 }
@@ -167,5 +167,5 @@ private extension AirConditionView {
 }
 
 #Preview {
-    AirConditionView(data: .constant(.init()))
+    AirConditionView(data: .constant(.init()), isButtonTapped: .constant(false))
 }

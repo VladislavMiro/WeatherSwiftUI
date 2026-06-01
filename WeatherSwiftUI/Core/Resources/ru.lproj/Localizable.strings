@@ -13,6 +13,9 @@
 
 // MARK: - WeatherView
 
+"WeatherView.ErrorTitle" = "Ошибка";
+"WeatherView.AlertOkButton" = "OK";
+
 "DayForecastView.Title" = "Прогноз на день";
 "WeekForecastView.Title" = "Прогноз на неделю";
 

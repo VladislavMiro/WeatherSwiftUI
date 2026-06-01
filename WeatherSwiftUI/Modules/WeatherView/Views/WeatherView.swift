@@ -12,13 +12,15 @@ struct WeatherView: View {
     
     // MARK: - Private properties
     
-    @StateObject private var viewModel: WeatherViewModel = WeatherViewModel(locationManager: LocationManager(), networkService: NetworkService())
+    @StateObject private var viewModel: WeatherViewModel
+    
     @State private var detailIsPresented: Bool = false
+    @State private var path: NavigationPath = NavigationPath()
     
     // MARK: - UI elements
     
     var body: some View {
-        VStack {
+        NavigationStack(path: $path) {
             ScrollView {
                 WeatherHeaderView(data: $viewModel.state.data.header)
                 
@@ -28,19 +30,21 @@ struct WeatherView: View {
                 WeekForecastView(data: $viewModel.state.data.weekForecast)
                     .padding([.top, .horizontal])
                 
-                AirConditionView(data: $viewModel.state.data.airCondition) {
-                    detailIsPresented = true
-                }
-                .padding()
+                AirConditionView(data: $viewModel.state.data.airCondition, isButtonTapped: $detailIsPresented)
+                    .padding()
+            }
+            .navigationDestination(isPresented: $detailIsPresented) {
+                Color.green
             }
             .background(Colors.background)
             .refreshable {
                 viewModel.send(.fetchData)
             }
         }
-        .alert("Error", isPresented: $viewModel.state.isError,
-               actions: {
-            Button("OK") { }
+        .alert(StringConstants.errorTitle, isPresented: $viewModel.state.isError, actions: {
+            Button(StringConstants.alertOkButton) {
+                viewModel.state.isError = false
+            }
         }, message: {
             Text(viewModel.state.errorMessage)
         })
@@ -55,7 +59,7 @@ struct WeatherView: View {
     // MARK: - Initialaizers
     
     public init(viewModel: WeatherViewModel) {
-       // self._viewModel = StateObject(wrappedValue: viewModel)
+       self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
 }
@@ -64,18 +68,19 @@ struct WeatherView: View {
 
 private extension WeatherView {
     
-    enum LayoutConstants {
-        
-    }
-    
     enum Colors {
         static let background: Color = Color(R.color.backgroundColor() ?? .systemBackground)
+    }
+    
+    enum StringConstants {
+        static let errorTitle: String = R.string.localizable.weatherViewErrorTitle()
+        static let alertOkButton: String = R.string.localizable.weatherViewAlertOkButton()
     }
     
 }
 
 #Preview {
-    let viewModel = WeatherViewModel(locationManager: LocationManager(), networkService: NetworkService())
+    let viewModel = WeatherViewModel(locationManager: LocationManager(), networkService: NetworkService(), dateFormatter: DateFormatterHelper())
     
     WeatherView(viewModel: viewModel)
 }

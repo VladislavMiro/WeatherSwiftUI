@@ -20,14 +20,16 @@ final class WeatherViewModel: ObservableObject {
     
     private let locationManager: LocationManagerProtocol?
     private let networkService: WeatherNetworkServiceProtocol
+    private let dateFormatter: DateFormatterProtocol
     private var task: Task<Void, Never>?
     private var cancelable: Set<AnyCancellable> = []
     
     // MARK: - initialaizers
     
-    public init(locationManager: LocationManagerProtocol, networkService: WeatherNetworkServiceProtocol) {
+    public init(locationManager: LocationManagerProtocol, networkService: WeatherNetworkServiceProtocol, dateFormatter: DateFormatterProtocol) {
         self.locationManager = locationManager
         self.networkService = networkService
+        self.dateFormatter = dateFormatter
         debugPrint("Init")
         bind()
     }
@@ -52,14 +54,6 @@ extension WeatherViewModel: WeatherViewModelProtocol {
 // MARK: - Extension with private methods
 
 private extension WeatherViewModel {
-    
-    func fetchLocation() {
-        if let locationManager = locationManager {
-            locationManager.getCurrentLocation()
-        } else {
-            fetchData()
-        }
-    }
     
     func fetchData() {
         if let coordinates = state.coordinates {
@@ -120,20 +114,18 @@ private extension WeatherViewModel {
     
     func prepareHeaderData(data: WeatherResponse) -> WeatherViewOutput.Header {
         let icon = (data.current.isDay ? "d" : "n") + data.current.condition.icon
+        let temp = String(Int(data.current.temp)) + Symbols.celciusSymbol.description
         
-        return .init(regionName: data.location.country,
-                     temperature: String(Int(data.current.temp)) + Symbols.celciusSymbol.description,
-                     description: data.current.condition.text,
-                     icon: icon
-        )
+        return .init(regionName: data.location.country, temperature: temp, description: data.current.condition.text, icon: icon)
     }
     
     func prepareDayForecast(data: [DailyForecast]) -> [WeatherViewOutput.DayForecastCell] {
         return data.map { item in
             let icon = (item.isDay ? "d" : "n") + item.condition.icon
+            let time = dateFormatter.convertDate(date: item.time) ?? "00:00"
+            let temp = String(Int(item.temp)) + Symbols.celciusSymbol.description
             
-            return WeatherViewOutput.DayForecastCell(time: convertDate(date: item.time) ?? "00:00", temperature: String(Int(item.temp)) + Symbols.celciusSymbol.description,
-                                                     icon: icon)
+            return WeatherViewOutput.DayForecastCell(time: time, temperature: temp, icon: icon)
         }
     }
     
@@ -141,11 +133,9 @@ private extension WeatherViewModel {
         return data.map { item in
             let icon = "d" + item.day.condition.icon
             let temp = String(Int(item.day.minTemp)) + "/" + String(Int(item.day.maxTemp))
+            let day = dateFormatter.formateDay(day: item.date) ?? "---"
             
-            return .init(day: formateDay(day: item.date) ?? "---",
-                         icon: icon,
-                         condition: item.day.condition.text,
-                         temperature: temp)
+            return .init(day: day, icon: icon, condition: item.day.condition.text, temperature: temp)
         }
     }
     
@@ -156,36 +146,7 @@ private extension WeatherViewModel {
         let realFeel = String(Int(data.current.feelslikeC)) + Symbols.celciusSymbol.description
         let uvIndex = String(Int(data.current.uv))
         
-        return .init(wind: wind,
-                     chanceOfRain: chanceOfRain,
-                     realFeel: realFeel,
-                     uvIndex: uvIndex)
-    }
-    
-    func convertDate(date: String) -> String? {
-        let formatter = DateFormatter()
-
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        
-        guard let date = formatter.date(from: date) else { return nil }
-        
-        formatter.dateFormat = "HH:mm"
-       
-        return formatter.string(from: date)
-    }
-    
-    func formateDay(day: String) -> String? {
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        let date = dateFormatter.date(from: day)
-        
-        guard let date = date else { return nil }
-        
-        dateFormatter.dateFormat = "EEEE"
-        
-        return dateFormatter.string(from: date)
+        return .init(wind: wind, chanceOfRain: chanceOfRain, realFeel: realFeel, uvIndex: uvIndex)
     }
     
 }

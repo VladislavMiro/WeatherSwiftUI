@@ -13,6 +13,9 @@
 
 // MARK: - WeatherView
 
+"WeatherView.ErrorTitle" = "Error";
+"WeatherView.AlertOkButton" = "OK";
+
 "DayForecastView.Title" = "Day forecast";
 "WeekForecastView.Title" = "Week Forecast";
 
@@ -30,3 +33,4 @@
 "Symbols.hPa" = " hPa";
 "Symbols.mBa" = " mBa";
 "Symbols.mm" = " mm";
+"
