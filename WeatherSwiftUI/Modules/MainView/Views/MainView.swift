@@ -11,17 +11,17 @@ import RswiftResources
 @MainActor
 struct MainView: View {
     
-    @StateObject private var viewModel: MainViewModel
+    @State private var selectedTab: Int = 0
+    private var factory: some WeatherViewFactoryProtocol = WeatherViewFactory()
     
-    public init(viewModel: MainViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+    public init() {
         configureTabBar()
     }
     
     var body: some View {
-        TabView(selection: $viewModel.coordinator.selectedTab) {
+        TabView(selection: $selectedTab) {
             VStack {
-                viewModel.coordinator.showWeatherView()
+                factory.createWeatherView()
             }
             .tag(MainViewTabs.current)
             .tabItem {
@@ -30,7 +30,7 @@ struct MainView: View {
             }
             
             VStack {
-                viewModel.coordinator.showListView()
+                Color.orange
             }
             .ignoresSafeArea()
             .tag(MainViewTabs.list)
@@ -79,8 +79,7 @@ private extension MainView {
 }
 
 #Preview {
-    let coordinator = MainViewCoordinator()
-    let viewModel = MainViewModel(coordinator: coordinator)
+    let viewModel = MainViewModel()
     
-    MainView(viewModel: viewModel)
+    MainView()
 }

@@ -12,7 +12,7 @@ struct WeatherView: View {
     
     // MARK: - Private properties
     
-    @StateObject private var viewModel: WeatherViewModel
+    @StateObject private var viewModel: WeatherViewModel = WeatherViewModel(locationManager: LocationManager(), networkService: NetworkService())
     @State private var detailIsPresented: Bool = false
     
     // MARK: - UI elements
@@ -34,9 +34,11 @@ struct WeatherView: View {
                 .padding()
             }
             .background(Colors.background)
+            .refreshable {
+                viewModel.send(.fetchData)
+            }
         }
-        .alert("Error",
-               isPresented: $viewModel.state.isError,
+        .alert("Error", isPresented: $viewModel.state.isError,
                actions: {
             Button("OK") { }
         }, message: {
@@ -45,12 +47,15 @@ struct WeatherView: View {
         .onAppear {
             viewModel.send(.fetchData)
         }
+        .onDisappear {
+            viewModel.send(.cancelTask)
+        }
     }
     
     // MARK: - Initialaizers
     
     public init(viewModel: WeatherViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+       // self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
 }
@@ -70,7 +75,7 @@ private extension WeatherView {
 }
 
 #Preview {
-    let viewModel = WeatherViewModel(coordinator: WeatherViewCoordinator(), locationManager: LocationManager(), networkService: NetworkService())
+    let viewModel = WeatherViewModel(locationManager: LocationManager(), networkService: NetworkService())
     
     WeatherView(viewModel: viewModel)
 }

@@ -9,7 +9,6 @@ import Foundation
 
 protocol WeatherViewModelProtocol: AnyObject {
     var state: WeatherViewState { get }
-    var coordinator: WeatherViewCoordinator { get }
     
     func send(_ intent: WeatherViewIntent)
 }

@@ -20,7 +20,7 @@ final class NetworkService {
     public init() {
         let configuration = URLSessionConfiguration.default
         
-        configuration.requestCachePolicy = .returnCacheDataElseLoad
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
         configuration.timeoutIntervalForRequest = 15
         configuration.timeoutIntervalForResource = 15
 

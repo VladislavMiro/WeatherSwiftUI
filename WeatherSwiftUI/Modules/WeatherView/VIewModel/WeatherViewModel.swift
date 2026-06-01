@@ -15,21 +15,20 @@ final class WeatherViewModel: ObservableObject {
     // MARK: - Public properties
     
     @Published public var state: WeatherViewState = .init()
-    @Published public var coordinator: WeatherViewCoordinator
     
     // MARK: - Private properties
     
     private let locationManager: LocationManagerProtocol?
     private let networkService: WeatherNetworkServiceProtocol
+    private var task: Task<Void, Never>?
     private var cancelable: Set<AnyCancellable> = []
     
     // MARK: - initialaizers
     
-    public init(coordinator: WeatherViewCoordinator, locationManager: LocationManagerProtocol, networkService: WeatherNetworkServiceProtocol) {
-        self.coordinator = coordinator
+    public init(locationManager: LocationManagerProtocol, networkService: WeatherNetworkServiceProtocol) {
         self.locationManager = locationManager
         self.networkService = networkService
-        
+        debugPrint("Init")
         bind()
     }
     
@@ -43,6 +42,8 @@ extension WeatherViewModel: WeatherViewModelProtocol {
         switch intent {
         case .fetchData:
             fetchData()
+        case .cancelTask:
+            cancelTask()
         }
     }
     
@@ -52,11 +53,19 @@ extension WeatherViewModel: WeatherViewModelProtocol {
 
 private extension WeatherViewModel {
     
-    func fetchData() {
+    func fetchLocation() {
         if let locationManager = locationManager {
             locationManager.getCurrentLocation()
         } else {
-            fetchWeather(coordinates: state.coordinates ?? Coordinates(latitude: 0, longitude: 0))
+            fetchData()
+        }
+    }
+    
+    func fetchData() {
+        if let coordinates = state.coordinates {
+            fetchWeather(coordinates: coordinates)
+        } else {
+            locationManager?.getCurrentLocation()
         }
     }
     
@@ -70,20 +79,34 @@ private extension WeatherViewModel {
     
     func fetchWeather(coordinates: Coordinates) {
         state.isError = false
+        state.isRefreshing = true
         
-        Task(priority: .userInitiated) {
+        cancelTask()
+        
+        debugPrint("fetchData")
+        
+        task = Task(priority: .userInitiated) {
             do {
                 let data = try await networkService.fetchWeather(by: coordinates)
+                
+                debugPrint(data)
                 
                 state.isRefreshing = false
                 prepareData(data: data)
             } catch let error {
+                guard let task = task, !task.isCancelled else { return }
+                
                 state.errorMessage = error.localizedDescription
                 state.isError = true
                 state.isRefreshing = false
             }
         }
         
+    }
+    
+    func cancelTask() {
+        task?.cancel()
+        task = nil
     }
     
     func prepareData(data: WeatherResponse) {
@@ -109,8 +132,7 @@ private extension WeatherViewModel {
         return data.map { item in
             let icon = (item.isDay ? "d" : "n") + item.condition.icon
             
-            return WeatherViewOutput.DayForecastCell(time: convertDate(date: item.time) ?? "00:00",
-                                                     temperature: String(Int(item.temp)) + Symbols.celciusSymbol.description,
+            return WeatherViewOutput.DayForecastCell(time: convertDate(date: item.time) ?? "00:00", temperature: String(Int(item.temp)) + Symbols.celciusSymbol.description,
                                                      icon: icon)
         }
     }
@@ -128,7 +150,7 @@ private extension WeatherViewModel {
     }
     
     func prepareAirCondition(data: WeatherResponse) -> WeatherViewOutput.AirCondition {
-        let day: Int = data.forecast.first == nil ? 0 : data.forecast.first!.day.chanceOfRain
+        let day: Int = data.forecast.first?.day.chanceOfRain ?? 0
         let chanceOfRain = String(day) + Symbols.precent.description
         let wind = String(Int(data.current.wind)) + Symbols.kmPerHour.description
         let realFeel = String(Int(data.current.feelslikeC)) + Symbols.celciusSymbol.description

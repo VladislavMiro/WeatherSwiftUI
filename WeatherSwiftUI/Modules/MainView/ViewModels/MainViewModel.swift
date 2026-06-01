@@ -10,14 +10,9 @@ import Combine
 
 final class MainViewModel: ObservableObject {
     
-    // MARK: - Public properties
-    
-    public var coordinator: MainViewCoordinator
-    
     // MARK: - Initialaizers
     
-    public init(coordinator: MainViewCoordinator) {
-        self.coordinator = coordinator
+    public init() {
     }
     
 }

@@ -10,11 +10,9 @@ import SwiftUI
 @main
 struct WeatherSwiftUIApp: App {
     
-    @StateObject private var appCoordinator = MainViewCoordinator()
-    
     var body: some Scene {
         WindowGroup {
-            appCoordinator.start()
+            MainView()
         }
     }
 }

@@ -9,4 +9,5 @@ import Foundation
 
 enum WeatherViewIntent {
     case fetchData
+    case cancelTask
 }

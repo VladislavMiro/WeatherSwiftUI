@@ -16,8 +16,10 @@ struct WeatherHeaderView: View {
         VStack(alignment: .center, spacing: LayoutConstants.spacing) {
             VStack(alignment: .center) {
                 Text(data.regionName)
+                    .padding()
                     .font(Fonts.cityLabel)
                     .foregroundStyle(Colors.cityLabelText)
+                    .multilineTextAlignment(.center)
                 Text(data.description)
                     .font(Fonts.descriptionLabel)
                     .foregroundStyle(Colors.descriptionLabelText)
