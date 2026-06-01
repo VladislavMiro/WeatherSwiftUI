@@ -15,6 +15,7 @@ final class WeatherViewModel: ObservableObject {
     // MARK: - Public properties
     
     @Published public var state: WeatherViewState = .init()
+    private(set) var weatherResponse: WeatherResponse?
     
     // MARK: - Private properties
     
@@ -86,6 +87,8 @@ private extension WeatherViewModel {
                 debugPrint(data)
                 
                 state.isRefreshing = false
+                weatherResponse = data
+                
                 prepareData(data: data)
             } catch let error {
                 guard let task = task, !task.isCancelled else { return }

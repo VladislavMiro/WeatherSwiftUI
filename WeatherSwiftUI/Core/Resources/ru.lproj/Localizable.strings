@@ -26,6 +26,19 @@
 "AirConditionView.RainChanceItemTitle" = "Вероятность дождя";
 "AirConditionView.UvIndexItemTitle" = "UV индекс";
 
+"AirConditionsItem.FeelsLike" = "Ощущается как";
+"AirConditionsItem.Wind" = "Ветер";
+"AirConditionsItem.MinTemperature" = "Мин температура";
+"AirConditionsItem.MaxTemperature" = "Макс температура";
+"AirConditionsItem.ChanceOfRain" = "Вероятность дождя";
+"AirConditionsItem.ChanceOfSnow" = "Вероятность снега";
+"AirConditionsItem.Hummidity" = "Влажность";
+"AirConditionsItem.Visibility" = "Видимость";
+"AirConditionsItem.Precipitation" = "Осадки";
+"AirConditionsItem.Pressure" = "Давление";
+"AirConditionsItem.Gust" = "Порыв ветра";
+"AirConditionsItem.UVIndex" = "UV индекс";
+
 "DetailWeatherView.Title" = "Состояние воздуха";
 
 "Symbols.celciusSymbol" = "°";

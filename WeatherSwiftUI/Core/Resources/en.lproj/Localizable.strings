@@ -26,6 +26,19 @@
 "AirConditionView.RainChanceItemTitle" = "Chance of rain";
 "AirConditionView.UvIndexItemTitle" = "UV Index";
 
+"AirConditionsItem.FeelsLike" = "Feels like";
+"AirConditionsItem.Wind" = "Wind";
+"AirConditionsItem.MinTemperature" = "Min temperature";
+"AirConditionsItem.MaxTemperature" = "Max temperature";
+"AirConditionsItem.ChanceOfRain" = "Chance of rain";
+"AirConditionsItem.ChanceOfSnow" = "Chance of snow";
+"AirConditionsItem.Hummidity" = "Hummidity";
+"AirConditionsItem.Visibility" = "Visibility";
+"AirConditionsItem.Precipitation" = "Precipitation";
+"AirConditionsItem.Pressure" = "Pressure";
+"AirConditionsItem.Gust" = "Gust";
+"AirConditionsItem.UVIndex" = "UV Index";
+
 "DetailWeatherView.Title" = "Air conditions";
 
 "Symbols.celciusSymbol" = "°";

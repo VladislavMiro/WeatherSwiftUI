@@ -1,21 +1,30 @@
-//
-//  DetailWeatherView.swift
-//  WeatherSwiftUI
-//
-//  Created by Vladislav Miroshnichenko on 01.06.2026.
-//
-
 import SwiftUI
 import RswiftResources
 
 struct DetailWeatherView: View {
     
+    // MARK: - Private properties
+    
+    private let columns: [GridItem] = [
+        GridItem(.flexible(minimum: 128)),
+        GridItem(.flexible(minimum: 128))
+    ]
+    
+    @StateObject private var viewModel: AirConditionViewModel
+    
+    // MARK: - UI elements
+    
     var body: some View {
         VStack(alignment: .center) {
             ScrollView(.vertical) {
-                WeatherHeaderView(data: .constant(.init()))
+                WeatherHeaderView(data: $viewModel.state.data.header)
                 
-                
+                LazyVGrid(columns: columns, alignment: .center, spacing: Constants.gridSpacing) {
+                    ForEach(viewModel.state.data.airCondition, id: \.self) { item in
+                        AirConditionCell(label: item.label, image: item.icon, data: item.data)
+                    }
+                }
+                .padding(.horizontal)
             }
             .navigationBarTitleDisplayMode(.inline)
             .background(Colors.background)
@@ -26,12 +35,12 @@ struct DetailWeatherView: View {
             .toolbarBackground(.visible, for: .navigationBar)
         }
     }
-}
-
-// MARK: - Extension with private methods
-
-private extension DetailWeatherView {
-
+    
+    // MARK: - Initialaizers
+    
+    public init(viewModel: AirConditionViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
     
 }
 
@@ -41,6 +50,11 @@ private extension DetailWeatherView {
     
     enum StringConstants {
         static let title: String = R.string.localizable.detailWeatherViewTitle()
+        static let gridItemMinSize: CGFloat = 128
+    }
+    
+    enum Constants {
+        static let gridSpacing: CGFloat = 16.0
     }
     
     enum Colors {
@@ -49,10 +63,4 @@ private extension DetailWeatherView {
         static let navBarBackground = Color(R.color.secondBackgroundColor() ?? .secondarySystemBackground)
     }
     
-}
-
-#Preview {
-    NavigationStack {
-        DetailWeatherView()
-    }
 }

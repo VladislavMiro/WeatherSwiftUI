@@ -10,9 +10,10 @@ final public class WeatherViewFactory {
         return WeatherView(viewModel: WeatherViewModel(locationManager: locationManager, networkService: networkService, dateFormatter: dateFormatter))
     }
     
-    func createDetailWeatherView() -> some View {
+    func createDetailWeatherView(data: WeatherResponse) -> some View {
+        let viewModel = AirConditionViewModel(data: data)
         
-        return DetailWeatherView()
+        return DetailWeatherView(viewModel: viewModel)
     }
     
 }

@@ -36,7 +36,9 @@ struct WeatherView: View {
                     .padding()
             }
             .navigationDestination(isPresented: $detailIsPresented) {
-                factory.createDetailWeatherView()
+                if let data = viewModel.weatherResponse {
+                    factory.createDetailWeatherView(data: data)
+                }
             }
             .background(Colors.background)
             .refreshable {
