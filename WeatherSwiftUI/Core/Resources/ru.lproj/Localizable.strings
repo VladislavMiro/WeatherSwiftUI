@@ -26,6 +26,8 @@
 "AirConditionView.RainChanceItemTitle" = "Вероятность дождя";
 "AirConditionView.UvIndexItemTitle" = "UV индекс";
 
+"DetailWeatherView.Title" = "Состояние воздуха";
+
 "Symbols.celciusSymbol" = "°";
 "Symbols.kmPerHour" = " km/h";
 "Symbols.km" = " km";

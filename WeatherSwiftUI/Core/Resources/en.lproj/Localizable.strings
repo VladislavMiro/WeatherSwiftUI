@@ -26,6 +26,8 @@
 "AirConditionView.RainChanceItemTitle" = "Chance of rain";
 "AirConditionView.UvIndexItemTitle" = "UV Index";
 
+"DetailWeatherView.Title" = "Air conditions";
+
 "Symbols.celciusSymbol" = "°";
 "Symbols.kmPerHour" = " km/h";
 "Symbols.km" = " km";

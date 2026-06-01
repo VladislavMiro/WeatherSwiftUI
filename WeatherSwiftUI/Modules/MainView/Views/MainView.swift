@@ -12,7 +12,7 @@ import RswiftResources
 struct MainView: View {
     
     @State private var selectedTab: Int = 0
-    private var factory: some WeatherViewFactoryProtocol = WeatherViewFactory()
+    private var factory = WeatherViewFactory()
     
     public init() {
         configureTabBar()

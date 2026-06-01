@@ -17,6 +17,8 @@ struct WeatherView: View {
     @State private var detailIsPresented: Bool = false
     @State private var path: NavigationPath = NavigationPath()
     
+    private var factory = WeatherViewFactory()
+    
     // MARK: - UI elements
     
     var body: some View {
@@ -34,7 +36,7 @@ struct WeatherView: View {
                     .padding()
             }
             .navigationDestination(isPresented: $detailIsPresented) {
-                Color.green
+                factory.createDetailWeatherView()
             }
             .background(Colors.background)
             .refreshable {

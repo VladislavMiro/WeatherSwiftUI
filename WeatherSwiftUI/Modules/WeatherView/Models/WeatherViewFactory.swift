@@ -1,13 +1,6 @@
 import SwiftUI
 
-protocol WeatherViewFactoryProtocol: AnyObject {
-    associatedtype ContentView: View
-
-    func createWeatherView() -> ContentView
-}
-
-final class WeatherViewFactory: WeatherViewFactoryProtocol {
-    
+final public class WeatherViewFactory {
     
     func createWeatherView() -> some View {
         let locationManager = LocationManager()
@@ -16,4 +9,10 @@ final class WeatherViewFactory: WeatherViewFactoryProtocol {
         
         return WeatherView(viewModel: WeatherViewModel(locationManager: locationManager, networkService: networkService, dateFormatter: dateFormatter))
     }
+    
+    func createDetailWeatherView() -> some View {
+        
+        return DetailWeatherView()
+    }
+    
 }
