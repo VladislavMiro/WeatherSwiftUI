@@ -6,8 +6,8 @@ struct DetailWeatherView: View {
     // MARK: - Private properties
     
     private let columns: [GridItem] = [
-        GridItem(.flexible(minimum: 128)),
-        GridItem(.flexible(minimum: 128))
+        GridItem(.flexible(minimum: Constants.gridItemMinSize)),
+        GridItem(.flexible(minimum: Constants.gridItemMinSize))
     ]
     
     @StateObject private var viewModel: AirConditionViewModel
@@ -50,11 +50,11 @@ private extension DetailWeatherView {
     
     enum StringConstants {
         static let title: String = R.string.localizable.detailWeatherViewTitle()
-        static let gridItemMinSize: CGFloat = 128
     }
     
     enum Constants {
         static let gridSpacing: CGFloat = 16.0
+        static let gridItemMinSize: CGFloat = 128
     }
     
     enum Colors {

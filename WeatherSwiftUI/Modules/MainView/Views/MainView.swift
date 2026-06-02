@@ -79,7 +79,5 @@ private extension MainView {
 }
 
 #Preview {
-    let viewModel = MainViewModel()
-    
     MainView()
 }

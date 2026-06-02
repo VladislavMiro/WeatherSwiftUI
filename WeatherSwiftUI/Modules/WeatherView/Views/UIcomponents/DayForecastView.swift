@@ -53,6 +53,7 @@ private extension DayForecastView {
         static let gridHeight: CGFloat = 150.0
         static let rowSize: CGFloat = 115.0
         static let rowSpacing: CGFloat = 15.0
+
     }
     
     enum Fonts {
