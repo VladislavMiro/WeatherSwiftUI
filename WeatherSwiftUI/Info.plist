@@ -2,13 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>WeatherApi</key>
-	<string>$(WeatherApi)</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Application need to get your location data</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Application need to get your location data</string>
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
+	<key>WeatherApi</key>
+	<string>$(WeatherApi)</string>
 </dict>
 </plist>

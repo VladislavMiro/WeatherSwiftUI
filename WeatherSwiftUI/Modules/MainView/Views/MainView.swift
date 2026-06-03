@@ -12,7 +12,8 @@ import RswiftResources
 struct MainView: View {
     
     @State private var selectedTab: Int = 0
-    private var factory = WeatherViewFactory()
+    private let weatheViewFactory = WeatherViewFactory()
+    private let weatherListViewFactory = WeatherListViewFactory()
     
     public init() {
         configureTabBar()
@@ -21,7 +22,7 @@ struct MainView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             VStack {
-                factory.createWeatherView()
+                weatheViewFactory.createWeatherView()
             }
             .tag(MainViewTabs.current)
             .tabItem {
@@ -30,7 +31,7 @@ struct MainView: View {
             }
             
             VStack {
-                Color.orange
+                weatherListViewFactory.createWeatherListView()
             }
             .ignoresSafeArea()
             .tag(MainViewTabs.list)
