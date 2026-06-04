@@ -5,8 +5,9 @@ struct WeatherListView: View {
     
     // MARK: - Private properties
     
-    @State private var isSearching = false
+    @StateObject private var viewModel: WeatherListViewModel = WeatherListViewModel()
     
+    @State private var isSearching = false
     @State private var path: NavigationPath = NavigationPath()
     @State private var isEdit: Bool = false
     @State private var searchText: String = ""
@@ -18,7 +19,7 @@ struct WeatherListView: View {
         NavigationStack(path: $path) {
             VStack {
                 if isSearching {
-                    SearchView(selectedItem: $selectedItem)
+                    SearchView(selectedItem: $viewModel.state.selectedRegion, data: $viewModel.state.regions)
                 } else {
                     List($mockData, id: \.self) { data in
                         VStack {
@@ -28,7 +29,7 @@ struct WeatherListView: View {
                         .listRowBackground(Colors.background)
                     }
                     .listStyle(.plain)
-                    .listRowSpacing(15)
+                    .listRowSpacing(Constants.listRowSpacing)
                 }
             }
             .background(Colors.background)
@@ -51,7 +52,7 @@ struct WeatherListView: View {
         .searchable(text: $searchText, isPresented: $isSearching, placement: .navigationBarDrawer)
         .keyboardType(.default)
         .onChange(of: searchText) {
-            debugPrint("search: " + searchText)
+            viewModel.send(action: .search(query: searchText))
         }
     }
 }
@@ -69,6 +70,10 @@ private extension WeatherListView {
     enum StringConstants {
         static let title: String = "Weather"
         static let editButtonTitle: String = "Edit"
+    }
+    
+    enum Constants {
+        static let listRowSpacing: CGFloat = 15.0
     }
 }
 
