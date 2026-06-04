@@ -27,7 +27,6 @@ struct SearchView: View {
             .onTapGesture {
                 selectedItem = item
                 dismissSearch()
-                debugPrint("tapped")
             }
         }
         .background(Colors.background)

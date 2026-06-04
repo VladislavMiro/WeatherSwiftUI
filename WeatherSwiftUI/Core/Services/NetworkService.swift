@@ -61,12 +61,41 @@ extension NetworkService: WeatherNetworkServiceProtocol {
     
 }
 
+// MARK: - Extension with WeatherNetworkServiceProtocol implementation
+
+extension NetworkService: LocationNetworkServiceProtocol {
+    
+    public func fetchLocation(with query: String) async throws -> [Region] {
+        let urlString = String(format: Endpoints.locationURL.rawValue, apiKey, query)
+        
+        guard let url = URL(string: urlString) else { throw URLError(.badURL) }
+        
+        var urlRequest = URLRequest(url: url)
+        
+        urlRequest.httpMethod = HTTPMethods.GET.rawValue
+        urlRequest.addValue("application/JSON", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await session.data(for: urlRequest)
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200
+        else {
+            throw URLError(.badServerResponse)
+        }
+        
+        let decodedData = try decoder.decode([Region].self, from: data)
+        
+        return decodedData
+    }
+    
+}
+
 // MARK: - Extension with private subobjects
 
 private extension NetworkService {
     
     enum Endpoints: String {
         case baseURL = "https://api.weatherapi.com/v1/forecast.json?key=%@&q=%f,%f&days=7&aqi=no&alerts=no"
+        case locationURL = "https://api.weatherapi.com/v1/search.json?key=%@&q=%@"
     }
     
     enum HTTPMethods: String {

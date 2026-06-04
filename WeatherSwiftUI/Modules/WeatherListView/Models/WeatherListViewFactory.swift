@@ -4,8 +4,9 @@ import SwiftUI
 final class WeatherListViewFactory {
     
     func createWeatherListView() -> some View {
-        
-        let view = WeatherListView()
+        let networkService = NetworkService()
+        let viewModel = WeatherListViewModel(networkService: networkService)
+        let view = WeatherListView(viewModel: viewModel)
         
         return view
     }

@@ -5,21 +5,25 @@ struct WeatherListView: View {
     
     // MARK: - Private properties
     
-    @StateObject private var viewModel: WeatherListViewModel = WeatherListViewModel()
+    @StateObject private var viewModel: WeatherListViewModel
     
     @State private var isSearching = false
     @State private var path: NavigationPath = NavigationPath()
     @State private var isEdit: Bool = false
     @State private var searchText: String = ""
     
-    @State private var selectedItem: String = ""
     @State private var mockData: [String] = ["1", "2", "3"]
+    
+    // MARK: - UI elements
     
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
                 if isSearching {
                     SearchView(selectedItem: $viewModel.state.selectedRegion, data: $viewModel.state.regions)
+                        .onDisappear {
+                            viewModel.send(action: .cancelTasks)
+                        }
                 } else {
                     List($mockData, id: \.self) { data in
                         VStack {
@@ -51,10 +55,31 @@ struct WeatherListView: View {
         }
         .searchable(text: $searchText, isPresented: $isSearching, placement: .navigationBarDrawer)
         .keyboardType(.default)
+        .submitLabel(.done)
         .onChange(of: searchText) {
             viewModel.send(action: .search(query: searchText))
         }
+        .onDisappear {
+            viewModel.send(action: .cancelTasks)
+        }
+        .alert(StringConstants.errorTitle, isPresented: $viewModel.state.isError) {
+            Button {
+                viewModel.send(action: .closeAlert)
+            } label: {
+                Text(StringConstants.okButtonTitle)
+            }
+        } message: {
+            Text(viewModel.state.errorMessage)
+        }
+
     }
+    
+    // MARK: - Initialaizers
+    
+    public init(viewModel: WeatherListViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
 }
 
 // MARK: - Extension with private subobjects
@@ -70,6 +95,8 @@ private extension WeatherListView {
     enum StringConstants {
         static let title: String = "Weather"
         static let editButtonTitle: String = "Edit"
+        static let errorTitle: String = "Error"
+        static let okButtonTitle: String = "OK"
     }
     
     enum Constants {
@@ -78,5 +105,7 @@ private extension WeatherListView {
 }
 
 #Preview {
-    WeatherListView()
+    let viewModel = WeatherListViewModel(networkService: NetworkService())
+    
+    WeatherListView(viewModel: viewModel)
 }
