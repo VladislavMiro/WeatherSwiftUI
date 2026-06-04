@@ -26,21 +26,15 @@ struct WeatherListView: View {
                         }
                 } else {
                     List($mockData, id: \.self) { data in
-                        VStack {
-                            Color.red
-                        }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Colors.background)
+                        WeatherListCell(temperature: "10", region: "Moscow, Russia", icon: "d113")
+                            .modifier(WeatherListCellStyle())
                     }
                     .listStyle(.plain)
                     .listRowSpacing(Constants.listRowSpacing)
                 }
             }
             .background(Colors.background)
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(Colors.navBarBackground, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .navigationBarTitleDisplayMode(.large)
+            .modifier(WeatherListNavBarStyle())
             .navigationTitle(StringConstants.title)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -89,7 +83,6 @@ private extension WeatherListView {
     enum Colors {
         static let background: Color = Color(R.color.backgroundColor() ?? .systemBackground)
         static let editButton: Color = Color(R.color.fontColor() ?? .systemBlue)
-        static let navBarBackground: Color = Color(R.color.backgroundColor() ?? .secondarySystemBackground)
     }
     
     enum StringConstants {
@@ -100,7 +93,7 @@ private extension WeatherListView {
     }
     
     enum Constants {
-        static let listRowSpacing: CGFloat = 15.0
+        static let listRowSpacing: CGFloat = 10.0
     }
 }
 
