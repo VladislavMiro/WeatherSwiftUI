@@ -6,28 +6,32 @@ struct WeatherListView: View {
     // MARK: - Private properties
     
     @StateObject private var viewModel: WeatherListViewModel
-    
-    @State private var isSearching = false
+
     @State private var path: NavigationPath = NavigationPath()
-    @State private var isEdit: Bool = false
-    @State private var searchText: String = ""
-    
-    @State private var mockData: [String] = ["1", "2", "3"]
     
     // MARK: - UI elements
     
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
-                if isSearching {
-                    SearchView(selectedItem: $viewModel.state.selectedRegion, data: $viewModel.state.regions)
-                        .onDisappear {
-                            viewModel.send(action: .cancelTasks)
-                        }
+                if viewModel.state.isSearching {
+                    SearchView(
+                        data: Binding(get: { viewModel.state.regions },
+                                      set: { _ in })
+                    ) { item in
+                        viewModel.send(action: .selectRegion(item))
+                    }
                 } else {
-                    List($mockData, id: \.self) { data in
-                        WeatherListCell(temperature: "10", region: "Moscow, Russia", icon: "d113")
+                    List {
+                        ForEach(viewModel.state.weather) { item in
+                            WeatherListCell(temperature: item.temperature,
+                                            region: item.location,
+                                            icon: item.icon)
                             .modifier(WeatherListCellStyle())
+                        }
+                        .onDelete { indexes in
+                            viewModel.send(action: .deleteItems(indexes))
+                        }
                     }
                     .listStyle(.plain)
                     .listRowSpacing(Constants.listRowSpacing)
@@ -38,20 +42,19 @@ struct WeatherListView: View {
             .navigationTitle(StringConstants.title)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        isEdit.toggle()
-                    }) {
-                        Text(StringConstants.editButtonTitle)
-                            .foregroundStyle(Colors.editButton)
-                    }
+                    EditButton()
                 }
             }
         }
-        .searchable(text: $searchText, isPresented: $isSearching, placement: .navigationBarDrawer)
+        .searchable(text: Binding(get: { viewModel.state.searchText },
+                                  set: { viewModel.send(action: .searchTextChanged($0)) }),
+                    isPresented: Binding(get: { viewModel.state.isSearching },
+                                         set: { viewModel.send(action: .searchModeChanged($0)) }),
+                    placement: .navigationBarDrawer)
         .keyboardType(.default)
         .submitLabel(.done)
-        .onChange(of: searchText) {
-            viewModel.send(action: .search(query: searchText))
+        .onAppear {
+            viewModel.send(action: .loadRegions)
         }
         .onDisappear {
             viewModel.send(action: .cancelTasks)
@@ -87,7 +90,6 @@ private extension WeatherListView {
     
     enum StringConstants {
         static let title: String = "Weather"
-        static let editButtonTitle: String = "Edit"
         static let errorTitle: String = "Error"
         static let okButtonTitle: String = "OK"
     }
@@ -98,7 +100,8 @@ private extension WeatherListView {
 }
 
 #Preview {
-    let viewModel = WeatherListViewModel(networkService: NetworkService())
+    let viewModel = WeatherListViewModel(networkService: NetworkService(),
+                                         storageManager: StorageManger())
     
     WeatherListView(viewModel: viewModel)
 }

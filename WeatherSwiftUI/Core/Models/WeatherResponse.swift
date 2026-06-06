@@ -1,14 +1,6 @@
-//
-//  WeatherResponse.swift
-//  AstonWeather
-//
-//  Created by Vladislav Miroshnichenko on 03.12.2023.
-//
-
 import Foundation
 
 struct WeatherResponse: Codable {
-
     public var location: Region
     public var current: CurrentWeather
     public var forecast: [Forecast]

@@ -1,7 +1,11 @@
 import Foundation
 
 enum WeatherListIntent {
-    case search(query: String)
     case cancelTasks
     case closeAlert
+    case loadRegions
+    case searchModeChanged(Bool)
+    case searchTextChanged(String)
+    case selectRegion(Region)
+    case deleteItems(IndexSet)
 }

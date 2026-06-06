@@ -6,8 +6,9 @@ struct SearchView: View {
     // MARK: - Private property
     
     @Environment(\.dismissSearch) var dismissSearch
-    @Binding private var selectedItem: Region?
     @Binding private var data: [Region]
+    
+    private let selectedItem: ((Region) -> Void)?
     
     // MARK: - UI elements
     
@@ -25,7 +26,7 @@ struct SearchView: View {
             .listRowBackground(Colors.background)
             .listRowSeparatorTint(Colors.font)
             .onTapGesture {
-                selectedItem = item
+                selectedItem?(item)
                 dismissSearch()
             }
         }
@@ -38,8 +39,9 @@ struct SearchView: View {
     
     // MARK: - Initialaizers
     
-    init(selectedItem: Binding<Region?>, data: Binding<[Region]>) {
-        self._selectedItem = selectedItem
+    init(data: Binding<[Region]>,
+         selectedItem: @escaping @MainActor (Region) -> Void) {
+        self.selectedItem = selectedItem
         self._data = data
     }
     
@@ -64,11 +66,10 @@ private extension SearchView {
 
 #Preview {
     SearchView(
-        selectedItem: .constant(.init(name: "test", region: "test", country: "Test", lat: 0.00, lon: 0.00)),
         data: .constant([
             .init(name: "test", region: "test", country: "Test", lat: 0.00, lon: 0.00),
             .init(name: "test", region: "test", country: "Test", lat: 0.00, lon: 0.00),
             .init(name: "test", region: "test", country: "Test", lat: 0.00, lon: 0.00)
         ])
-    )
+    ) { _ in }
 }
