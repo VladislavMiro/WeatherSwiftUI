@@ -27,11 +27,12 @@ final class WeatherViewModel: ObservableObject {
     
     // MARK: - initialaizers
     
-    public init(locationManager: LocationManagerProtocol, networkService: WeatherNetworkServiceProtocol, dateFormatter: DateFormatterProtocol) {
+    public init(data: WeatherResponse? = nil, locationManager: LocationManagerProtocol? = nil, networkService: WeatherNetworkServiceProtocol, dateFormatter: DateFormatterProtocol) {
+        self.weatherResponse = data
         self.locationManager = locationManager
         self.networkService = networkService
         self.dateFormatter = dateFormatter
-        debugPrint("Init")
+    
         bind()
     }
     
@@ -57,8 +58,8 @@ extension WeatherViewModel: WeatherViewModelProtocol {
 private extension WeatherViewModel {
     
     func fetchData() {
-        if let coordinates = state.coordinates {
-            fetchWeather(coordinates: coordinates)
+        if let weatherResponse = weatherResponse {
+            prepareData(data: weatherResponse)
         } else {
             locationManager?.getCurrentLocation()
         }
@@ -85,13 +86,13 @@ private extension WeatherViewModel {
                 let data = try await networkService.fetchWeather(by: coordinates)
                 
                 debugPrint(data)
-                
+                guard !Task.isCancelled else { return }
                 state.isRefreshing = false
                 weatherResponse = data
                 
                 prepareData(data: data)
             } catch let error {
-                guard let task = task, !task.isCancelled else { return }
+                guard !Task.isCancelled else { return }
                 
                 state.errorMessage = error.localizedDescription
                 state.isError = true

@@ -2,12 +2,20 @@ import SwiftUI
 
 final public class WeatherViewFactory {
     
-    func createWeatherView() -> some View {
+    func createWeatherView(data: WeatherResponse? = nil) -> some View {
         let locationManager = LocationManager()
         let networkService = NetworkService()
         let dateFormatter = DateFormatterHelper()
         
-        return WeatherView(viewModel: WeatherViewModel(locationManager: locationManager, networkService: networkService, dateFormatter: dateFormatter))
+        if let data = data {
+            let viewModel = WeatherViewModel(data: data, networkService: networkService, dateFormatter: dateFormatter)
+            
+            return WeatherView(viewModel: viewModel)
+        } else {
+            let viewModel = WeatherViewModel(locationManager: locationManager, networkService: networkService, dateFormatter: dateFormatter)
+            
+            return WeatherView(viewModel: viewModel)
+        }
     }
     
     func createDetailWeatherView(data: WeatherResponse) -> some View {

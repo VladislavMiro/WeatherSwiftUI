@@ -6,8 +6,11 @@ struct WeatherListView: View {
     // MARK: - Private properties
     
     @StateObject private var viewModel: WeatherListViewModel
-
     @State private var path: NavigationPath = NavigationPath()
+    @Environment(\.editMode) private var editMode
+    
+    private let factory: WeatherListViewFactory
+    
     
     // MARK: - UI elements
     
@@ -28,11 +31,15 @@ struct WeatherListView: View {
                                             region: item.location,
                                             icon: item.icon)
                             .modifier(WeatherListCellStyle())
+                            .onTapGesture {
+                                viewModel.send(action: .selectItem(item))
+                            }
                         }
                         .onDelete { indexes in
                             viewModel.send(action: .deleteItems(indexes))
                         }
                     }
+                    .environment(\.editMode, editMode)
                     .listStyle(.plain)
                     .listRowSpacing(Constants.listRowSpacing)
                 }
@@ -43,6 +50,12 @@ struct WeatherListView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
+                        .environment(\.editMode, editMode)
+                }
+            }
+            .navigationDestination(isPresented: $viewModel.state.isDetailShow) {
+                if let data = viewModel.state.selectedItem {
+                    factory.createWeatherView(data: data)
                 }
             }
         }
@@ -73,8 +86,9 @@ struct WeatherListView: View {
     
     // MARK: - Initialaizers
     
-    public init(viewModel: WeatherListViewModel) {
+    public init(viewModel: WeatherListViewModel, factory: WeatherListViewFactory) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+        self.factory = factory
     }
     
 }
@@ -102,6 +116,7 @@ private extension WeatherListView {
 #Preview {
     let viewModel = WeatherListViewModel(networkService: NetworkService(),
                                          storageManager: StorageManger())
+    let factory = WeatherListViewFactory()
     
-    WeatherListView(viewModel: viewModel)
+    WeatherListView(viewModel: viewModel, factory: factory)
 }

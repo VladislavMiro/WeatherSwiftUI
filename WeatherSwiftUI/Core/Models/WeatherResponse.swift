@@ -1,6 +1,7 @@
 import Foundation
 
 struct WeatherResponse: Codable {
+    public var id: UUID = UUID()
     public var location: Region
     public var current: CurrentWeather
     public var forecast: [Forecast]

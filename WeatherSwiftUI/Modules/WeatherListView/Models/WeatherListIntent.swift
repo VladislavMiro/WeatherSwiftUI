@@ -7,5 +7,6 @@ enum WeatherListIntent {
     case searchModeChanged(Bool)
     case searchTextChanged(String)
     case selectRegion(Region)
+    case selectItem(WeatherListDTO)
     case deleteItems(IndexSet)
 }

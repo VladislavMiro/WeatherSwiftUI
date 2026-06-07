@@ -17,6 +17,7 @@ final class WeatherListViewModel {
     private var task: Task<Void, Never>?
     private var cancellables: Set<AnyCancellable> = []
     private var coordinates: [SDCorrdinates] = []
+    private var weather: [WeatherResponse] = []
     
     // MARK: - Initialaizers
     
@@ -47,6 +48,8 @@ extension WeatherListViewModel: WeatherListViewModelProtocol {
             state.searchText = text
         case .selectRegion(let region):
             self.selectRegion(data: region)
+        case .selectItem(let item):
+            selectItem(data: item)
         case .deleteItems(let indexes):
             self.deleteRegion(at: indexes)
         }
@@ -100,9 +103,18 @@ private extension WeatherListViewModel {
         saveRegion(data: data)
     }
     
+    func selectItem(data: WeatherListDTO) {
+        let data = weather.first { $0.id == data.id }
+        
+        guard let data = data else { return }
+        
+        state.selectedItem = data
+        state.isDetailShow = true
+    }
+    
     func saveRegion(data: Region) {
         do {
-            let item = SDCorrdinates(latitude: data.lat, longitude: data.lon)
+            let item = SDCorrdinates(id: UUID(), latitude: data.lat, longitude: data.lon)
             
             try storageManager.save(data: item)
             
@@ -118,6 +130,8 @@ private extension WeatherListViewModel {
         do {
             let coordinates = try storageManager.load(with: nil)
             
+            self.coordinates = coordinates
+            
             self.fetchWeather(by: coordinates)
         } catch let error {
             showAlert(message: error.localizedDescription)
@@ -130,15 +144,15 @@ private extension WeatherListViewModel {
                 let weather = state.weather[index]
                 
                 let coordinate = coordinates.first { item in
-                    item.id.hashValue == weather.id
+                    item.modelID == weather.id
                 }
                 
                 guard let coordinate = coordinate else { return }
                 
                 try storageManager.delete(data: coordinate)
                 
+                coordinates.removeAll { $0.modelID == coordinate.modelID }
                 state.weather.remove(at: index)
-                coordinates.removeAll { $0.id == coordinate.id }
             }
         } catch let error {
             showAlert(message: error.localizedDescription)
@@ -157,12 +171,20 @@ private extension WeatherListViewModel {
                         group.addTask {
                             try Task.checkCancellation()
                             
-                            let id = coordinate.id.hashValue
+                            let id = coordinate.modelID
                             let latitudde = coordinate.latitude
                             let longitude = coordinate.longitude
                             
                             let response = try await self.networkService
                                 .fetchWeather(by: .init(latitude: latitudde, longitude: longitude))
+                            
+                            await MainActor.run {
+                                var res = response
+                                
+                                res.id = id
+                                
+                                self.weather.append(res)
+                            }
                             
                             return await self.prepareResponse(id: id, data: response)
                         }
@@ -186,7 +208,7 @@ private extension WeatherListViewModel {
         }
     }
     
-    func prepareResponse(id: Int, data: WeatherResponse) -> WeatherListDTO {
+    func prepareResponse(id: UUID, data: WeatherResponse) -> WeatherListDTO {
         let temperature = Int(data.current.temp).description + Symbols.celciusSymbol.description
         let location = data.location.country + ", " + data.location.region
         let icon = (data.current.isDay ? "d" : "n") + data.current.condition.icon

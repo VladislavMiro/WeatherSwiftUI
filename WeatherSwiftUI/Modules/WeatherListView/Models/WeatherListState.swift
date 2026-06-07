@@ -3,8 +3,9 @@ import Foundation
 struct WeatherListState {
     var searchText: String = ""
     var isSearching: Bool = false
+    var isDetailShow: Bool = false
     
-    var selectedRegion: Region?
+    var selectedItem: WeatherResponse?
     var regions: [Region] = []
     var weather: [WeatherListDTO] = []
 
